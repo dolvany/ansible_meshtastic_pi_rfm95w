@@ -1,0 +1,52 @@
+---
+- name: Meshtastic
+  hosts: meshtastic
+  tasks:
+   - name: Meshtastic key
+     ansible.builtin.get_url:
+      url: https://download.opensuse.org/repositories/network:Meshtastic:beta/Debian_13/Release.key
+      dest: /etc/apt/keyrings/meshtastic.asc
+      mode: '644'
+   - name: Meshtastic repo
+     ansible.builtin.apt_repository:
+      repo: "deb [signed-by=/etc/apt/keyrings/meshtastic.asc] http://download.opensuse.org/repositories/network:/Meshtastic:/beta/Debian_13/ /"
+      state: present
+   - name: Install meshtastic
+     ansible.builtin.package:
+      name:
+       - meshtasticd
+       - python3-meshtastic
+      state: present
+   - name: Enable SPI
+     ansible.builtin.lineinfile:
+      path: /boot/firmware/config.txt
+      regex: '#dtparam=spi=on'
+      line: dtparam=spi=on
+   - name: Disable CS
+     ansible.builtin.lineinfile:
+      path: /etc/meshtasticd/available.d/lora-Adafruit-RFM9x.yaml
+      regex: '  CS: 7'
+      line: '#  CS: 7'
+   - name: Set spidev
+     ansible.builtin.lineinfile:
+      path: /etc/meshtasticd/available.d/lora-Adafruit-RFM9x.yaml
+      line: '  spidev: spidev0.1'
+   - name: Webserver config
+     ansible.builtin.blockinfile:
+      path: /etc/meshtasticd/config.yaml
+      insertafter: "Webserver:"
+      block: |2
+          Port: 443
+          RootPath: /usr/share/meshtasticd/web
+          SSLKey: /etc/meshtasticd/ssl/private_key.pem
+          SSLCert: /etc/meshtasticd/ssl/certificate.pem
+   - name: Create a symbolic link
+     ansible.builtin.file:
+      src: /etc/meshtasticd/available.d/lora-Adafruit-RFM9x.yaml
+      dest: /etc/meshtasticd/config.d/lora-Adafruit-RFM9x.yaml
+      state: link
+   - name: Meshtastic service
+     ansible.builtin.systemd_service:
+      state: started
+      name: meshtasticd
+      enabled: true
