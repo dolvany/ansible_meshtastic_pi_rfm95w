@@ -8,4 +8,4 @@ Ansible playbook for raspberry pi with the adafruit rfm95w hat. Based on the off
 [Case for RaspberryPi with LoRa/GPS hat](https://www.printables.com/model/22293-case-for-raspberrypi-with-loragps-hat)  
 [MeshSense](https://affirmatech.com/meshsense)
 # Motivation
-A MeshSense reconnect is required when a meshtastic node reboots, requiring that MeshSense rebuild network state. I noticed that the rak4631 and rak11200 were rebooting frequently. Linux native on the Raspberry Pi has proven much more stable.
+A MeshSense reconnect is required when a meshtastic node reboots, rebuilding network state. I noticed that the rak4631 and rak11200 were rebooting frequently. Linux native on the Raspberry Pi has proven much more stable.
