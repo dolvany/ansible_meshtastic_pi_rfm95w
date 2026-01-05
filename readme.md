@@ -7,3 +7,5 @@ Ansible playbook for raspberry pi with the adafruit rfm95w hat. Based on the off
 [ALFA Network ARS-915P 2 dBi SMA Male 915 MHz antenna](https://store.rokland.com/collections/all-helium-antennnas/products/alfa-network-ars-915pr-2-dbi-sma-male-915-mhz-antenna-with-90-elbow-for-t-beam-t-echo-lora32)  
 [Case for RaspberryPi with LoRa/GPS hat](https://www.printables.com/model/22293-case-for-raspberrypi-with-loragps-hat)  
 [MeshSense](https://affirmatech.com/meshsense)
+# Motivation
+A MeshSense reconnect is required when a meshtastic node reboots, requiring that MeshSense rebuild network state. I noticed that the rak4631 and rak11200 were rebooting frequently. Linux native on the Raspberry Pi has proven much more stable.
